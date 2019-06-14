@@ -9,16 +9,16 @@ object ChatHtml {
     "<!DOCTYPE html>" +
       s"""<html>
             <body>
-              <div>Hello World!</div>
+              <div>聊天室</div>
 
               <form action="#">
-                <label for="name">Name: </label><input id="name" type="text" />
-                <input id="join" type="button" value="Join!"/>
+                <label for="name">姓名: </label><input id="name" type="text" />
+                <input id="join" type="button" value="加入!"/>
               </form>
 
               <form action="#">
-                <label for="message">Say something: </label><input id="message" type="text" />
-                <input id="send" type="button" value="Send" disabled="true"/>
+                <label for="message">说点什么: </label><input id="message" type="text" />
+                <input id="send" type="button" value="发送" disabled="true"/>
               </form>
 
               <div id="playground"></div>

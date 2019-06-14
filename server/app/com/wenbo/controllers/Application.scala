@@ -7,7 +7,7 @@ import akka.actor._
 import akka.stream.{KillSwitches, Materializer, UniqueKillSwitch}
 import akka.stream.scaladsl._
 import akka.util.{ByteString, Timeout}
-import boopickle.Default._
+
 import com.wenbo.client.shared.SharedMessages._
 import play.api.Logger
 import play.api.http.websocket.{BinaryMessage, CloseCodes, CloseMessage, Message}
@@ -30,6 +30,7 @@ class Application @Inject()(cc: ControllerComponents)(implicit actorSystem: Acto
 
   implicit val webSocketTransformer = new MessageFlowTransformer[SharedMessages, SharedMessages] {
     override def transform(flow: Flow[SharedMessages, SharedMessages, _]): Flow[Message, Message, _] = {
+      import boopickle.Default._
       AkkaStreams.bypassWith[ Message, SharedMessages, Message ]( Flow[ Message ] collect {
         case BinaryMessage( data ) =>
           Unpickle.apply[SharedMessages].tryFromBytes( data.asByteBuffer ) match {

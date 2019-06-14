@@ -4,7 +4,6 @@ import com.wenbo.client.shared.SharedMessages._
 import org.scalajs.dom
 import org.scalajs.dom._
 import org.scalajs.dom.raw.{HTMLButtonElement, HTMLInputElement, HTMLParagraphElement}
-import boopickle.Default._
 import scala.scalajs.js.typedarray.{ArrayBuffer, TypedArrayBuffer}
 import scala.scalajs.js.typedarray.TypedArrayBufferOps._
 
@@ -59,7 +58,7 @@ object ChatPage {
         }
 
         sendButton.onclick = {event =>
-
+          import boopickle.Default._
           chat.binaryType = "arraybuffer"
           chat.send(Pickle.intoBytes[SharedMessages](Broadcast(name, messageField.value)).arrayBuffer())
           messageField.value = ""
@@ -84,7 +83,8 @@ object ChatPage {
         var message = e.data
         message match {
           case buf: ArrayBuffer => {
-            Unpickle.apply[SharedMessages].fromBytes(TypedArrayBuffer.wrap(buf )) match {
+            import boopickle.Default._
+            Unpickle.apply[SharedMessages].fromBytes(TypedArrayBuffer.wrap(buf)) match {
               case Join(sender) =>
                 playground.insertBefore(p(s"欢迎用户 ${sender} 登录！"), playground.firstChild)
               case Broadcast(sender, content) =>
