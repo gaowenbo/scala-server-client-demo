@@ -4,9 +4,8 @@
 
 # Home page
 GET        /                             com.wenbo.controllers.Application.index
-GET        /chatPage                     com.wenbo.controllers.ChatController.chatPage
-GET        /chat                         com.wenbo.controllers.ChatController.chat
-GET        /chatroom                     com.wenbo.controllers.Application.chat
+GET        /chatPage                     com.wenbo.controllers.Application.chatPage
+GET        /chat                         com.wenbo.controllers.Application.chat
 
 # Prefix must match `play.assets.urlPrefix`
 GET        /assets/*file                 controllers.Assets.at(file)
