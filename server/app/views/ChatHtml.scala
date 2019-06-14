@@ -3,11 +3,11 @@ package views
 import controllers.routes
 
 object ChatHtml {
-    def getHtml =
-      {
-        var js = scalajs.html.scripts("client", routes.Assets.versioned(_).toString, name => getClass.getResource(s"/public/$name") != null)
-        "<!DOCTYPE html>" +
-          s"""<html>
+  def getHtml =
+  {
+    var js = scalajs.html.scripts("client", routes.Assets.versioned(_).toString, name => getClass.getResource(s"/public/$name") != null)
+    "<!DOCTYPE html>" +
+      s"""<html>
             <body>
               <div>Hello World!</div>
 
@@ -25,6 +25,6 @@ object ChatHtml {
               ${js}
             </body>
           </html>"""
-      }
+  }
 
 }

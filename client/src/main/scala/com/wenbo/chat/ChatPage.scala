@@ -1,9 +1,13 @@
 package com.wenbo.chat
 
-import com.wenbo.hello.shared.SharedMessages.Chat
+import com.wenbo.client.shared.SharedMessages._
 import org.scalajs.dom
 import org.scalajs.dom._
 import org.scalajs.dom.raw.{HTMLButtonElement, HTMLInputElement, HTMLParagraphElement}
+import boopickle.Default._
+import scala.scalajs.js.typedarray.{ArrayBuffer, TypedArrayBuffer}
+import scala.scalajs.js.typedarray.TypedArrayBufferOps._
+
 
 object ChatPage {
     var joinButton = dom.document.getElementById("join").asInstanceOf[HTMLButtonElement]
@@ -41,6 +45,7 @@ object ChatPage {
       playground.appendChild(p(s"${name}登录中。。。"))
 
       var chat = new WebSocket(getWebsocketUrl(dom.document, name, room))
+
       chat.onopen = {e =>
         playground.insertBefore(p("连接成功！"), playground.firstChild)
         sendButton.disabled = false
@@ -54,8 +59,9 @@ object ChatPage {
         }
 
         sendButton.onclick = {event =>
-          import com.hypertino.binders.json.JsonBinders._
-          chat.send(Chat(name, messageField.value, "Chat").toJson)
+
+          chat.binaryType = "arraybuffer"
+          chat.send(Pickle.intoBytes[SharedMessages](Broadcast(name, messageField.value)).arrayBuffer())
           messageField.value = ""
           messageField.focus()
           event.preventDefault()
@@ -75,15 +81,21 @@ object ChatPage {
       }
       chat.onmessage = {e =>
         println(e.data.toString)
-        import com.hypertino.binders.json.JsonBinders._
-        var message = e.data.toString.parseJson[Chat]
+        var message = e.data
         message match {
-          case Chat(sender, _, "Join") =>
-            playground.insertBefore(p(s"欢迎用户 ${sender} 登录！"), playground.firstChild)
-          case Chat(sender, content, "Broadcast") =>
-            playground.insertBefore(p(s"${sender}:${content}"), playground.firstChild)
-          case Chat(sender, _, "Leave") =>
-            playground.insertBefore(p(s"用户 ${sender} 退出"), playground.firstChild)
+          case buf: ArrayBuffer => {
+            Unpickle.apply[SharedMessages].fromBytes(TypedArrayBuffer.wrap(buf )) match {
+              case Join(sender) =>
+                playground.insertBefore(p(s"欢迎用户 ${sender} 登录！"), playground.firstChild)
+              case Broadcast(sender, content) =>
+                playground.insertBefore(p(s"${sender}:${content}"), playground.firstChild)
+              case Leave(sender) =>
+                playground.insertBefore(p(s"用户 ${sender} 退出"), playground.firstChild)
+              case _ => {
+                println("not supported")
+              }
+            }
+          }
           case _ => {
             println("not supported")
           }

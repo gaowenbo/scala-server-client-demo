@@ -3,13 +3,10 @@
 # ~~~~
 
 # Home page
-GET        /                             com.wenbo.hello.controllers.Application.index
-GET        /convert                      com.wenbo.hello.controllers.Application.convert
-GET        /chatPage                     com.wenbo.hello.controllers.ChatController.chatPage
-GET        /ws                           com.wenbo.hello.controllers.Application.ws
-GET        /hello                        com.wenbo.hello.controllers.Application.hello
-GET        /chat                         com.wenbo.hello.controllers.ChatController.chat
-GET        /chatroom                     com.wenbo.hello.controllers.Application.chat
+GET        /                             com.wenbo.controllers.Application.index
+GET        /chatPage                     com.wenbo.controllers.ChatController.chatPage
+GET        /chat                         com.wenbo.controllers.ChatController.chat
+GET        /chatroom                     com.wenbo.controllers.Application.chat
 
 # Prefix must match `play.assets.urlPrefix`
 GET        /assets/*file                 controllers.Assets.at(file)
