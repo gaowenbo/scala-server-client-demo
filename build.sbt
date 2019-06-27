@@ -1,4 +1,4 @@
-import sbtcrossproject.{crossProject, CrossType}
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val server = (project in file("server")).settings(commonSettings).settings(
   scalaJSProjects := Seq(client),
@@ -26,11 +26,16 @@ lazy val client = (project in file("client")).settings(commonSettings).settings(
   dependsOn(sharedJs)
 
 lazy val shared = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
-  .in(file("shared"))
-  .settings(commonSettings).settings(
+//  .crossType(CrossType.Pure)
+//  .in(file("shared"))
+  .settings(commonSettings)
+  .settings(
+    name := "shared"
+  )
+  .settings(
   libraryDependencies ++= Seq(
-    "org.scala-lang" % "scala-reflect" % "2.12.6"
+    "org.scala-lang" % "scala-reflect" % "2.12.6",
+    "org.scala-js" %% "scalajs-library" % "1.0.0-M3"
   )
 )
 lazy val sharedJvm = shared.jvm
