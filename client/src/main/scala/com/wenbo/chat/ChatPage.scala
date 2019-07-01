@@ -45,6 +45,7 @@ object ChatPage {
 
       var chat = new WebSocket(getWebsocketUrl(dom.document, name, room))
 
+      chat.binaryType = "arraybuffer"
       chat.onopen = {e =>
         playground.insertBefore(p("连接成功！"), playground.firstChild)
         sendButton.disabled = false
@@ -59,7 +60,6 @@ object ChatPage {
 
         sendButton.onclick = {event =>
           import boopickle.Default._
-          chat.binaryType = "arraybuffer"
           chat.send(Pickle.intoBytes[SharedMessages](Broadcast(name, messageField.value)).arrayBuffer())
           messageField.value = ""
           messageField.focus()
@@ -79,7 +79,6 @@ object ChatPage {
         sendButton.disabled = true
       }
       chat.onmessage = {e =>
-        println(e.data.toString)
         var message = e.data
         message match {
           case buf: ArrayBuffer => {
@@ -92,12 +91,12 @@ object ChatPage {
               case Leave(sender) =>
                 playground.insertBefore(p(s"用户 ${sender} 退出"), playground.firstChild)
               case _ => {
-                println("not supported")
+                println("not supported 2" + TypedArrayBuffer.wrap(buf))
               }
             }
           }
           case _ => {
-            println("not supported")
+            println("not supported 1" + e.data)
           }
         }
         e
