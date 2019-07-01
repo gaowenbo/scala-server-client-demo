@@ -8,7 +8,6 @@ lazy val server = (project in file("server")).settings(commonSettings).settings(
   compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
   libraryDependencies ++= Seq(
     "com.vmunier" %% "scalajs-scripts" % "1.1.2",
-    "io.suzaku" %% "boopickle" % "1.3.0",
     guice,
     ws,
       specs2 % Test
@@ -20,29 +19,27 @@ lazy val server = (project in file("server")).settings(commonSettings).settings(
 lazy val client = (project in file("client")).settings(commonSettings).settings(
   scalaJSUseMainModuleInitializer := true,
   libraryDependencies ++= Seq(
-    "org.scala-js" %%% "scalajs-dom" % "0.9.5"
+    "org.scala-js" %%% "scalajs-dom" % "0.9.7"
   )
 ).enablePlugins(ScalaJSPlugin, ScalaJSWeb).
   dependsOn(sharedJs)
 
 lazy val shared = crossProject(JSPlatform, JVMPlatform)
-//  .crossType(CrossType.Pure)
-//  .in(file("shared"))
   .settings(commonSettings)
   .settings(
     name := "shared"
   )
   .settings(
   libraryDependencies ++= Seq(
-    "org.scala-lang" % "scala-reflect" % "2.12.6",
-    "org.scala-js" %% "scalajs-library" % "1.0.0-M3"
+    "org.scala-lang" % "scala-reflect" % "2.12.8",
+    "org.scala-js" %% "scalajs-library" % "1.0.0-M7"
   )
 )
 lazy val sharedJvm = shared.jvm
 lazy val sharedJs = shared.js
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.12.8",
   organization := "com.wenbo"
 )
 
