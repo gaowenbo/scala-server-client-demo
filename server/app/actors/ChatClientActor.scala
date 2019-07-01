@@ -11,9 +11,6 @@ class ChatClientActor(out: ActorRef, user: Option[String]) extends Actor with Ac
         out ! Broadcast(s, c)
       }
     }
-    case a => {
-      println("ddd")
-    }
   }
 
   override def preStart(): Unit = {
